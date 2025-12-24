@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hulaan Mo!!!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a3d2f 0%, #1a5c48 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .christmas-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 3rem;
+            color: #ffcc00;
+            text-shadow: 3px 3px 0 #d35400, 5px 5px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #f8f8f8;
+            margin-bottom: 20px;
+        }
+        
+        .snowflakes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .snowflake {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .instruction {
+            text-align: center;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #ffcc00;
+        }
+        
+        .game-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .input-label {
+            font-size: 1.4rem;
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        .guess-input {
+            padding: 15px;
+            font-size: 1.8rem;
+            width: 150px;
+            text-align: center;
+            border-radius: 10px;
+            border: 3px solid #ffcc00;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #0a3d2f;
+            font-weight: bold;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-guess {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-reset {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-sound {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .info-box {
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 1rem;
+            color: #ffcc00;
+        }
+        
+        .info-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .result-area {
+            text-align: center;
+            min-height: 100px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .message {
+            font-size: 1.8rem;
+            color: #ffcc00;
+            margin-bottom: 15px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hint {
+            font-size: 1.3rem;
+            color: #a3e4d7;
+            font-style: italic;
+        }
+        
+        .attempts-display {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .attempt {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .attempt.used {
+            background-color: #e74c3c;
+        }
+        
+        .attempt.current {
+            background-color: #ffcc00;
+            color: #0a3d2f;
+            transform: scale(1.2);
+        }
+        
+        .decorations {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 30px;
+        }
+        
+        .decoration {
+            font-size: 3rem;
+            color: #ffcc00;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #a3e4d7;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        
+        .sound-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .sound-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .sound-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .sound-btn.active {
+            background-color: rgba(255, 204, 0, 0.5);
+            color: #ffcc00;
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .instruction {
+                font-size: 1.1rem;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .guess-input {
+                width: 120px;
+                font-size: 1.5rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .sound-controls {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="snowflakes" id="snowflakes"></div>
+        
+        <div class="sound-controls">
+            <button id="musicToggle" class="sound-btn active">
+                <i class="fas fa-music"></i>
+            </button>
+            <button id="soundToggle" class="sound-btn active">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </div>
+        
+        <div class="christmas-header">
+            <h1 class="title">HULAAN MO!</h1>
+            <p class="subtitle">May Regalo Kapag Tumama ka!</p>
+        </div>
+        
+        <div class="game-area">
+            <div class="instruction">
+                <p>Hulaan ang numero mula 1 hanggang 100!<br>
+                May 5 chance lamang. Kapag naubos, lalabas ang tamang sagot!</p>
+            </div>
+            
+            <div class="game-controls">
+                <div class="input-group">
+                    <div class="input-label">Ilagay ang iyong hula:</div>
+                    <input type="number" id="guessInput" class="guess-input" min="1" max="100" placeholder="1-100">
+                </div>
+                
+                <div class="buttons">
+                    <button id="guessBtn" class="btn btn-guess">
+                        <i class="fas fa-gift"></i> Hulaan!
+                    </button>
+                    <button id="resetBtn" class="btn btn-reset">
+                        <i class="fas fa-redo"></i> Simulan Muli
+                    </button>
+                </div>
+            </div>
+            
+            <div class="game-info">
+                <div class="info-box">
+                    <div class="info-label">Mga Pagtatangka</div>
+                    <div class="info-value" id="attemptsCount">0/5</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Nakaraang Hula</div>
+                    <div class="info-value" id="lastGuess">-</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Natitirang Pagtatangka</div>
+                    <div class="info-value" id="remainingAttempts">5</div>
+                </div>
+            </div>
+            
+            <div class="attempts-display" id="attemptsDisplay">
+                <!-- Attempt circles will be generated here -->
+            </div>
+        </div>
+        
+        <div class="result-area">
+            <div class="message" id="message">Maghula ng numero mula 1 hanggang 100! Pindutin ang "Hulaan!" para marinig ang tunog!</div>
+            <div class="hint" id="hint"></div>
+        </div>
+        
+        <div class="decorations">
+            <div class="decoration">🎄</div>
+            <div class="decoration">🎁</div>
+            <div class="decoration">⭐</div>
+            <div class="decoration">🦌</div>
+            <div class="decoration">🎅</div>
+        </div>
+        
+        <div class="footer">
+            <p>Larong pampasko para sa Christmas Party! | Parehong masaya at nakaka-excite!</p>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let secretNumber;
+        let attempts;
+        let maxAttempts = 5;
+        let gameOver;
+        let musicEnabled = true;
+        let soundEnabled = true;
+        let audioContext;
+        let musicInterval;
+        
+        // DOM elements
+        const guessInput = document.getElementById('guessInput');
+        const guessBtn = document.getElementById('guessBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const message = document.getElementById('message');
+        const hint = document.getElementById('hint');
+        const attemptsCount = document.getElementById('attemptsCount');
+        const lastGuess = document.getElementById('lastGuess');
+        const remainingAttempts = document.getElementById('remainingAttempts');
+        const attemptsDisplay = document.getElementById('attemptsDisplay');
+        const musicToggle = document.getElementById('musicToggle');
+        const soundToggle = document.getElementById('soundToggle');
+        
+        // Initialize the game
+        function initGame() {
+            // Generate random number between 1 and 100
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameOver = false;
+            
+            // Reset UI
+            message.textContent = "Maghula ng numero mula 1 hanggang 100!";
+            hint.textContent = "";
+            guessInput.value = "";
+            lastGuess.textContent = "-";
+            attemptsCount.textContent = "0/5";
+            remainingAttempts.textContent = "5";
+            
+            // Clear and create attempt circles
+            attemptsDisplay.innerHTML = "";
+            for (let i = 0; i < maxAttempts; i++) {
+                const attemptCircle = document.createElement('div');
+                attemptCircle.classList.add('attempt');
+                attemptCircle.textContent = i + 1;
+                attemptsDisplay.appendChild(attemptCircle);
+            }
+            
+            // Update attempt circles
+            updateAttemptCircles();
+            
+            // Start background music if enabled
+            if (musicEnabled) {
+                startBackgroundMusic();
+            }
+            
+            console.log("Secret number (for testing):", secretNumber);
+        }
+        
+        // Update attempt circles display
+        function updateAttemptCircles() {
+            const attemptCircles = document.querySelectorAll('.attempt');
+            attemptCircles.forEach((circle, index) => {
+                circle.classList.remove('used', 'current');
+                
+                if (index < attempts) {
+                    circle.classList.add('used');
+                } else if (index === attempts) {
+                    circle.classList.add('current');
+                }
+            });
+        }
+        
+        // Create Web Audio Context
+        function getAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+        
+        // Play a beep sound (for wrong guesses - "eng" sound)
+        function playWrongSound() {
+            if (!soundEnabled) return;
+            
+            const context = getAudioContext();
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+            
+            // "Eng" sound - lower frequency, quick decay
+            oscillator.frequency.setValueAtTime(200, context.currentTime);
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.3, context.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+            
+            oscillator.start(context.currentTime);
+            oscillator.stop(context.currentTime + 0.5);
+        }
+        
+        // Play a success sound (for correct guesses - "ting ting ting")
+        function playCorrectSound() {
+            if (!soundEnabled) return;
+            
+            const context = getAudioContext();
+            
+            // Play three high-pitched "ting" sounds
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const oscillator = context.createOscillator();
+                    const gainNode = context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    
+                    // High frequency for "ting" sound
+                    oscillator.frequency.setValueAtTime(800 + i * 100, context.currentTime);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.2, context.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+                    
+                    oscillator.start(context.currentTime);
+                    oscillator.stop(context.currentTime + 0.3);
+                }, i * 200); // Stagger the sounds
+            }
+        }
+        
+        // Play game over sound
+        function playGameOverSound() {
+            if (!soundEnabled) return;
+            
+            const context = getAudioContext();
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+            
+            // Sad descending tone
+            oscillator.frequency.setValueAtTime(300, context.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, context.currentTime + 1.5);
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.3, context.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 1.5);
+            
+            oscillator.start(context.currentTime);
+            oscillator.stop(context.currentTime + 1.5);
+        }
+        
+        // Create Jingle Bells background music
+        function startBackgroundMusic() {
+            if (!musicEnabled) return;
+            
+            // Clear any existing music
+            if (musicInterval) {
+                clearInterval(musicInterval);
+            }
+            
+            const context = getAudioContext();
+            let noteIndex = 0;
+            const tempo = 300; // ms per note
+            
+            // Jingle Bells melody notes (simplified)
+            const melody = [
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 1 },   // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 1 },   // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 783, duration: 0.5 }, // G
+                { freq: 523, duration: 0.5 }, // C
+                { freq: 587, duration: 0.5 }, // D
+                { freq: 659, duration: 2 },   // E
+                // Rest
+                { freq: 0, duration: 0.5 },
+                { freq: 698, duration: 0.5 }, // F
+                { freq: 698, duration: 0.5 }, // F
+                { freq: 698, duration: 0.5 }, // F
+                { freq: 698, duration: 0.5 }, // F
+                { freq: 698, duration: 0.5 }, // F
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 587, duration: 0.5 }, // D
+                { freq: 587, duration: 0.5 }, // D
+                { freq: 659, duration: 0.5 }, // E
+                { freq: 587, duration: 1 },   // D
+                { freq: 783, duration: 2 },   // G
+            ];
+            
+            musicInterval = setInterval(() => {
+                if (!musicEnabled) {
+                    clearInterval(musicInterval);
+                    return;
+                }
+                
+                const note = melody[noteIndex % melody.length];
+                
+                if (note.freq > 0) {
+                    const oscillator = context.createOscillator();
+                    const gainNode = context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    
+                    oscillator.frequency.setValueAtTime(note.freq, context.currentTime);
+                    oscillator.type = 'triangle'; // Softer sound
+                    
+                    gainNode.gain.setValueAtTime(0.05, context.currentTime); // Very quiet background
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + note.duration * tempo / 500);
+                    
+                    oscillator.start(context.currentTime);
+                    oscillator.stop(context.currentTime + note.duration * tempo / 500);
+                }
+                
+                noteIndex++;
+            }, tempo);
+        }
+        
+        // Stop background music
+        function stopBackgroundMusic() {
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+        }
+        
+        // Process the guess
+        function processGuess() {
+            if (gameOver) return;
+            
+            const userGuess = parseInt(guessInput.value);
+            
+            // Validate input
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = "Pakilagay ang tamang numero (1-100)!";
+                message.style.color = "#ff9999";
+                playWrongSound();
+                return;
+            }
+            
+            // Increment attempts
+            attempts++;
+            
+            // Update UI
+            attemptsCount.textContent = `${attempts}/${maxAttempts}`;
+            remainingAttempts.textContent = maxAttempts - attempts;
+            lastGuess.textContent = userGuess;
+            
+            // Update attempt circles
+            updateAttemptCircles();
+            
+            // Check if guess is correct
+            if (userGuess === secretNumber) {
+                gameOver = true;
+                message.innerHTML = `<span style="color:#ffcc00">🎉 WOW! TAMA ANG HULA MO! 🎉</span><br>Ang numero ay ${secretNumber}!`;
+                hint.textContent = "Panalo ka ng espesyal na regalo ngayong Pasko! 🎁";
+                message.style.color = "#ffcc00";
+                
+                // Play correct sound
+                playCorrectSound();
+                
+                // Stop background music
+                stopBackgroundMusic();
+                
+                confettiEffect();
+                return;
+            }
+            
+            // Play wrong guess sound
+            playWrongSound();
+            
+            // Provide hint
+            if (userGuess < secretNumber) {
+                hint.textContent = "Mas mataas ang numero! Subukan mong maghula ng mas malaking numero.";
+            } else {
+                hint.textContent = "Mas mababa ang numero! Subukan mong maghula ng mas maliit na numero.";
+            }
+            
+            // Check if attempts are exhausted
+            if (attempts >= maxAttempts) {
+                gameOver = true;
+                message.innerHTML = `<span style="color:#e74c3c">💀 Naku! Naubos na ang iyong mga pagtatangka!</span><br>Ang tamang numero ay ${secretNumber}.`;
+                hint.textContent = "Subukan muli sa susunod na round!";
+                message.style.color = "#e74c3c";
+                
+                // Play game over sound
+                playGameOverSound();
+                return;
+            }
+            
+            // Regular response
+            message.innerHTML = `Hula #${attempts}: <span style="color:#ffcc00">${userGuess}</span>`;
+            message.style.color = "#ffffff";
+            
+            // Clear input
+            guessInput.value = "";
+        }
+        
+        // Create snowflakes
+        function createSnowflakes() {
+            const snowflakesContainer = document.getElementById('snowflakes');
+            const snowflakeCount = 50;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                
+                // Random position
+                snowflake.style.left = `${Math.random() * 100}%`;
+                
+                // Random animation duration between 5s and 15s
+                const duration = Math.random() * 10 + 5;
+                snowflake.style.animationDuration = `${duration}s`;
+                
+                // Random animation delay
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                
+                snowflakesContainer.appendChild(snowflake);
+            }
+        }
+        
+        // Simple confetti effect
+        function confettiEffect() {
+            const confettiCount = 50;
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = ['🎉', '🎊', '⭐', '🎁', '🎄'][Math.floor(Math.random() * 5)];
+                confetti.style.position = 'absolute';
+                confetti.style.fontSize = `${Math.random() * 20 + 15}px`;
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = `-50px`;
+                confetti.style.opacity = '0.9';
+                confetti.style.zIndex = '9999';
+                confetti.style.animation = `fallConfetti ${Math.random() * 3 + 2}s linear forwards`;
+                
+                // Add animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fallConfetti {
+                        0% { transform: translateY(0) rotate(0deg); }
+                        100% { transform: translateY(100vh) rotate(${Math.random() * 360}deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                container.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+        
+        // Toggle background music
+        function toggleMusic() {
+            musicEnabled = !musicEnabled;
+            
+            if (musicEnabled) {
+                musicToggle.classList.add('active');
+                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                startBackgroundMusic();
+            } else {
+                musicToggle.classList.remove('active');
+                musicToggle.innerHTML = '<i class="fas fa-music-slash"></i>';
+                stopBackgroundMusic();
+            }
+        }
+        
+        // Toggle sound effects
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            
+            if (soundEnabled) {
+                soundToggle.classList.add('active');
+                soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                soundToggle.classList.remove('active');
+                soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        }
+        
+        // Event listeners
+        guessBtn.addEventListener('click', processGuess);
+        
+        resetBtn.addEventListener('click', function() {
+            // Resume music if it was playing
+            if (musicEnabled) {
+                startBackgroundMusic();
+            }
+            initGame();
+        });
+        
+        guessInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                processGuess();
+            }
+        });
+        
+        musicToggle.addEventListener('click', toggleMusic);
+        
+        soundToggle.addEventListener('click', toggleSound);
+        
+        // Initialize the game when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            initGame();
+            createSnowflakes();
+            
+            // Create audio context on first user interaction (to comply with browser policies)
+            document.addEventListener('click', function initAudio() {
+                getAudioContext();
+                document.removeEventListener('click', initAudio);
+            });
+            
+            // Also initialize on any button click
+            guessBtn.addEventListener('click', function() {
+                getAudioContext();
+            });
+        });
+        
+        // Handle visibility change - pause music when tab is not active
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopBackgroundMusic();
+            } else if (musicEnabled) {
+                startBackgroundMusic();
+            }
+        });
+    </script>
+</body>
+</html>
